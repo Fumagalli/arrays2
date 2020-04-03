@@ -3,32 +3,28 @@ const faker = require('faker');
 faker.locate = 'pt_BR';
 
 class Person {
-  constructor(name, birthday, genre, lastpurchase) {
+  constructor(name, birthday, genre, lastpurchase, countpurchase) {
     this.name = name;
     this.birthday = birthday;
     this.genre = genre;
     this.lastpurchase = lastpurchase;
-    this.countpurchase = lastpurchase;
-  }
-
-  newPurchase(newPurchase) {
-    this.lastpurchase = newPurchase;
-    this.countpurchase += newPurchase;
+    this.countpurchase = countpurchase;
   }
 }
 
 const clients = [];
 
 for (let index = 0; index < 1000; index += 1) {
-  const birthday = faker.date.past(109, 2019);
+  const birthday = faker.date.past(110, 2020);
   const minPrice = faker.commerce.price();
 
   const ppl = new Person(
     faker.name.findName(),
     birthday,
     faker.random.arrayElement(['male', 'female']),
-    minPrice,
-    faker.commerce.price(minPrice),
+    faker.date.past(2, 2020),
+    faker.random.number(70),
+    // faker.commerce.price(minPrice),
   );
 
   clients.push(ppl);
@@ -117,6 +113,19 @@ function totalSells() {
   return total;
 }
 
+// Implemente uma função que retorne os dados dos clientes que não compram há mais de 1 ano.
+function clientsWithoutPurchaseAtLeast(months) {
+  const date = new Date();
+  const maxDate = date.setMonth(date.getMonth() - months);
+  return clients.filter(client => client.lastpurchase < maxDate)
+}
+
+// Implemente uma função que retorne os dados dos clientes que já realizaram mais de 15 compras.
+function clientWithPurchases(number) {
+  return clients.filter(client => client.countpurchase > number)
+}
+
+// console.log(clients);
 // console.log(clientNameStartedWithCharacter('j'));
 // console.log(countClientNameStartedWithCharacter('q'));
 // console.log(getClientsNames());
@@ -128,9 +137,9 @@ function totalSells() {
 // console.log(' ');
 // console.log('Aqui é pra forçar um retorno existente');
 // console.log(isClient(clients[0].name));
-console.log(totalSells());
+// console.log(totalSells());
+// console.log(clientsWithoutPurchaseAtLeast(12));
+// console.log(clientWithPurchases(15));
 
 
-// Implemente uma função que retorne os dados dos clientes que não compram há mais de 1 ano.
 
-// Implemente uma função que retorne os dados dos clientes que já realizaram mais de 15 compras.
